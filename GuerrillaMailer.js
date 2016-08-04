@@ -58,12 +58,16 @@ var GuerrillaMailer = (function($){
 	}
 	
 	function getNewEmail(cb){
-		if(false===data.email) return getEmail(cb);
-		var rand;
-		try{ 
-			rand = Math.random().toString(36).substring(7);
-		}catch(e){}
-		setEmailUser(rand, cb);
+		if(false===data.email) getEmail(function(){
+			getNewEmail(cb);
+		});
+		else{
+			var rand;
+			try{ 
+				rand = Math.random().toString(36).substring(7);
+			}catch(e){}
+			setEmailUser(rand, cb);
+		}
 	}
 	
 	return {
