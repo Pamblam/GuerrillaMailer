@@ -26,7 +26,7 @@ var GuerrillaMailer = (function($){
 			}
 		}
 		$.ajax({
-			url: "http://api.guerrillamail.com/ajax.php",
+			url: "https://api.guerrillamail.com/ajax.php",
 			data: params,
 			type: "GET",
 			dataType: "jsonp",
