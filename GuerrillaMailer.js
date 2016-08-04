@@ -57,17 +57,19 @@ var GuerrillaMailer = (function($){
 		});
 	}
 	
+	function getRandomString(){
+		var rand = "abcdefg";
+		try{ 
+			rand = Math.random().toString(36).substring(7);
+		}catch(e){}
+		return rand;
+	}
+	
 	function getNewEmail(cb){
 		if(false===data.email) getEmail(function(){
 			getNewEmail(cb);
 		});
-		else{
-			var rand;
-			try{ 
-				rand = Math.random().toString(36).substring(7);
-			}catch(e){}
-			setEmailUser(rand, cb);
-		}
+		else setEmailUser(getRandomString(), cb);
 	}
 	
 	return {
