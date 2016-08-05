@@ -2,11 +2,51 @@
 
 var GuerrillaMailer = (function($){
 	
-	var data = {
-		email: false,
-		expires: false,
-		token: false
+	var D = [
+		"sharklasers.com",
+		"guerrillamail.info",
+		"grr.la",
+		"guerrillamail.biz",
+		"guerrillamail.com",
+		"guerrillamail.de",
+		"guerrillamail.net",
+		"guerrillamail.org",
+		"guerrillamailblock.com",
+		"pokemail.net",
+		"spam4.me"
+	];
+	
+	var Domains = {
+		SHARKLASERS: { COM: 0 },
+		GUERRILLAMAIL: {
+			INFO: 1,
+			BIZ: 3,
+			COM: 4,
+			DE: 5,
+			NET: 6,
+			ORG: 7
+		},
+		GRR: { LA: 2 },
+		GUERRILLAMAILBLOCK: { COM: 8 },
+		POKEMAIL: { NET: 9 },
+		SPAM4: { ME: 10 }
 	};
+	
+	var data = {
+		emailUser: false,
+		emailDomain: D[Domains.GUERRILLAMAILBLOCK.COM],
+		scrambledEmailUser: false,
+		expires: false,
+		token: false,
+		emails: []
+	};
+	
+	function email(data){
+		self = this;
+		self.from = null;
+		self.subject = null;
+		self.snippet = null;
+	}
 	
 	function ts(){
 		if (!Date.now) Date.now = function(){ return new Date().getTime(); };
@@ -36,25 +76,17 @@ var GuerrillaMailer = (function($){
 		});
 	}
 	
-	function getInfo(){ return data; }
-	
-	function getEmail(cb){
-		if(false!==data.email) cb(data.email);
-		makeAPICall("get_email_address", null, function(resp){
-			data.email = resp.email_addr;
-			data.expires = 3600 - ts() - resp.email_timestamp;
-			data.token = resp.sid_token;
-			cb(data.email);
-		});
-	}
-	
-	function setEmailUser(eu, cb){
-		makeAPICall("set_email_user", {email_user: eu}, function(resp){
-			data.email = resp.email_addr;
-			data.expires = 3600 + resp.email_timestamp;
-			data.token = resp.sid_token;
-			cb(data.email);
-		});
+	var lastEmail = "";
+	function construct(resp){
+		data.emailUser = resp.email_addr.split("@")[0];
+		data.emailUserDomain = resp.email_addr.split("@")[1];
+		data.expires = 3600 + resp.email_timestamp;
+		data.token = resp.sid_token;
+		data.scrambledEmailUser = resp.alias;
+		if(lastEmail!==data.emailUser){
+			data.emails = [];
+			lastEmail = data.emailUserl;
+		}
 	}
 	
 	function getRandomString(){
@@ -65,15 +97,65 @@ var GuerrillaMailer = (function($){
 		return rand;
 	}
 	
+	function getEmail(cb){
+		if(false!==data.emailUser) return cb(data.emailUser+"@"+data.emailDomain);
+		makeAPICall("get_email_address", null, function(resp){
+			construct(resp);
+			cb(data.emailUser+"@"+data.emailDomain);
+		});
+	}
+	
+	function getEmails(cb){
+		if(false===data.emailUser) return getEmail(function(email){
+			getEmails(cb);
+		});
+		// TODO.. grab emails
+		// TODO.. create array of email objects
+		// email constructor has been started above
+		// add array of emails to data.emails
+		// callback with emails...
+	}
+	
+	function getExpiration(cb){
+		if(false!==data.emailUser) return cb(data.expires);
+		makeAPICall("get_email_address", null, function(resp){
+			construct(resp);
+			cb(data.expires);
+		});
+	}
+	
+	function getScrambledEmail(cb){
+		if(false!==data.emailUser) return cb(data.scrambledEmailUser+"@"+data.emailDomain);
+		makeAPICall("get_email_address", null, function(resp){
+			construct(resp);
+			cb(data.scrambledEmailUser+"@"+data.emailDomain);
+		});
+	}
+	
 	function getNewEmail(cb){
-		if(false===data.email) getEmail(function(){
+		if(false===data.emailUser) getEmail(function(){
 			getNewEmail(cb);
 		});
 		else setEmailUser(getRandomString(), cb);
 	}
 	
+	function setEmailUser(eu, cb){
+		makeAPICall("set_email_user", {email_user: eu}, function(resp){
+			construct(resp);
+			cb(data.emailUser+"@"+data.emailDomain);
+		});
+	}
+	
+	function setEmailDomain(domain){
+		if(undefined===D[domain]) return;
+		data.emailDomain = D[domain];
+	}
+	
 	return {
-		getInfo: getInfo,
+		Domains: Domains,
+		setEmailDomain: setEmailDomain,
+		getScrambledEmail: getScrambledEmail,
+		getExpiration: getExpiration,
 		getEmail: getEmail,
 		getNewEmail: getNewEmail,
 		setEmailUser: setEmailUser

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>GuerrillaMailer Demo</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<style>
+			body, html{
+				padding:0;
+				margin:0;
+				font-family: arial,sans-serif;
+				background: rgba(0, 0, 0, 0) url("https://img.guerrillamail.com/a/d/6/ad62a966e4c96c73405ed2b5d2afbe0d.png") repeat scroll 0 0;
+				color: #462300;
+			}
+			a, a:hover, a:link, a:visited{
+				color: #462300;
+				text-decoration:none;
+			}
+			.header{
+				background: #616161;
+				border-bottom: 3px solid #accc39;
+				margin:0;
+				padding:1em;
+				text-align:center;
+			}
+			.output{
+				height: 150px;
+				margin: 1em;
+				padding: 1em;
+				font-family: monospace;
+				border:1px solid #accc39;
+				border-radius: 5px;
+				background: #000;
+				color: #fff;
+				overflow: auto;
+			}
+			.input{
+				margin: 1em;
+				padding: 1em;
+				font-family: monospace;
+				border:1px solid black;
+				border-radius: 5px;
+				background: activeborder;
+				color: #000;
+			}
+			h1{
+				padding-left:1em;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="header">
+			<img src="https://img.guerrillamail.com/4/6/f/46f9fd8911b3a915c1fec119e9062d00.png" />
+		</div>
+		<h1>
+			<a href="https://github.com/Pamblam/GuerrillaMailer">GuerrillaMailer</a> Demo 
+			<!-- Star button. -->
+			<a aria-label="Star adelphia/GuerrillaMailer on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/adelphia/GuerrillaMailer#stargazers_count" data-count-href="/adelphia/GuerrillaMailer/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/adelphia/GuerrillaMailer" class="github-button">Star</a>
+			<!-- Issue button. -->
+			<a aria-label="Issue adelphia/GuerrillaMailer on GitHub" data-count-aria-label="# issues on GitHub" data-count-api="/repos/adelphia/GuerrillaMailer#open_issues_count" data-style="mega" data-icon="octicon-issue-opened" href="https://github.com/adelphia/GuerrillaMailer/issues" class="github-button">Issue</a>
+			<!-- Download button. -->
+			<a aria-label="Download adelphia/GuerrillaMailer on GitHub" data-style="mega" data-icon="octicon-cloud-download" href="https://github.com/adelphia/GuerrillaMailer/archive/master.zip" class="github-button">Download</a>
+		</h1>
+		<div class="input">
+			<h2>Input</h2>
+			<button id="currentem">Get Current Email</button>
+			<button id="newem">Get New Email</button>
+			<button id="customem">Set Email User</button>
+			<button id="getexpiration">Get Expiration</button>
+			<button id="scrambledem">Get Scrambled Email</button>
+			<button id="setdomain">Set Email Domain</button>
+		</div>
+		<div class="output">
+			<h2>Output</h2>
+		</div>
+		<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+		<script src="GuerrillaMailer.js"></script>
+		<script>
+			$(function(){
+				
+				////////////////////////////////////////////////////////////////
+				// Demo code starts here.. /////////////////////////////////////
+				////////////////////////////////////////////////////////////////
+				
+				$("#currentem").click(function(){
+					console.log(">");
+					console.log("Fetching current email...");
+					// Get current email
+					GuerrillaMailer.getEmail(function(currentEmail){
+						console.log("Current email is: "+currentEmail);
+					});
+				});
+				
+				$("#newem").click(function(){
+					console.log(">");
+					console.log("Fetching new email...");
+					// Get a random new email
+					GuerrillaMailer.getNewEmail(function(NewEmail){
+						console.log("New email is: "+NewEmail);
+					});
+				});
+				
+				$("#customem").click(function(){
+					console.log(">");
+					var newEmailUser = prompt("Please enter new email user (the first part of the email address)");
+					console.log("Fetching new email...");
+					// Set custom email
+					GuerrillaMailer.setEmailUser(newEmailUser, function(newEmail){
+						console.log("New email is: "+newEmail);
+					});
+				});
+				
+				$("#scrambledem").click(function(){
+					console.log(">");
+					console.log("Fetching scrambled email...");
+					// Get scrambled email
+					GuerrillaMailer.getScrambledEmail(function(scrambledEmail){
+						console.log("Scrambled email is: "+scrambledEmail);
+					});
+				});
+				
+				$("#getexpiration").click(function(){
+					console.log(">");
+					console.log("Fetching expiration timestamp...");
+					// Get expiration timestamp
+					GuerrillaMailer.getExpiration(function(timestamp){
+						console.log("Email expires at: "+timestamp);
+					});
+				});
+				
+				$("#setdomain").click(function(){
+					console.log(">");
+					var domain = prompt("Enter the NUMBER that corresponds to the domain you want to use: \n\n"+
+						"0) GuerrillaMailer.Domains.SHARKLASERS.COM\n"+
+						"1) GuerrillaMailer.Domains.GUERRILLAMAIL.INFO\n"+
+						"2) GuerrillaMailer.Domains.GRR.LA\n"+
+						"3) GuerrillaMailer.Domains.GUERRILLAMAIL.BIZ\n"+
+						"4) GuerrillaMailer.Domains.GUERRILLAMAIL.COM\n"+
+						"5) GuerrillaMailer.Domains.GUERRILLAMAIL.DE\n"+
+						"6) GuerrillaMailer.Domains.GUERRILLAMAIL.NET\n"+
+						"7) GuerrillaMailer.Domains.GUERRILLAMAIL.ORG\n"+
+						"8) GuerrillaMailer.Domains.GUERRILLAMAILBLOCK.BIZ\n"+
+						"9) GuerrillaMailer.Domains.POKEMAIL.NET\n"+
+						"10) GuerrillaMailer.Domains.SPAM4.ME");
+					console.log("Saving domain preference...");
+					GuerrillaMailer.setEmailDomain(domain);
+					GuerrillaMailer.getEmail(function(currentEmail){
+						console.log("Current email is: "+currentEmail);
+					});
+				});
+				
+				////////////////////////////////////////////////////////////////
+				// End of demo code ////////////////////////////////////////////
+				////////////////////////////////////////////////////////////////
+				
+				// Keep the output div scrolled to the bottom
+				var scrolled = false;
+				function updateScroll(){
+					if($(".output")[0].scrollTop == $(".output")[0].scrollHeight)
+						scrolled = false;
+					if(!scrolled){
+						$(".output")[0].scrollTop = $(".output")[0].scrollHeight;
+					}
+				}
+				$("#yourDivID").on('scroll', function(){
+					scrolled=true;
+				});
+				
+				// Make console output to the output div
+				window.console.doLog = window.console.log;
+				window.console.log = function(msg){
+					window.console.doLog(msg);
+					$(".output").append("<div>"+msg+"</div>");
+					updateScroll();
+				};
+			});
+		</script>
+		
+		<!-- for the github button -->
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+	</body>
+</html>
