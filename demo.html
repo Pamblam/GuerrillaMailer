@@ -69,6 +69,7 @@
 			<button id="getexpiration">Get Expiration</button>
 			<button id="scrambledem">Get Scrambled Email</button>
 			<button id="setdomain">Set Email Domain</button>
+			<button id="checkinbox">Check Inbox</button>
 		</div>
 		<div class="output">
 			<h2>Output</h2>
@@ -125,6 +126,21 @@
 					// Get expiration timestamp
 					GuerrillaMailer.getExpiration(function(timestamp){
 						console.log("Email expires at: "+timestamp);
+					});
+				});
+				
+				$("#checkinbox").click(function(){
+					console.log(">");
+					console.log("Fetching inbox...");
+					// Get inbox items
+					GuerrillaMailer.getEmails(function(emails){
+						if(!emails.length) console.log("No emails to show");
+						else{
+							console.log("Listing "+emails.length+" emails...");
+							for(var i=0; i<emails.length; i++){
+								console.log(">> #"+i+") From: "+emails[i].getFrom()+" | "+emails[i].getSubject());
+							}
+						}
 					});
 				});
 				

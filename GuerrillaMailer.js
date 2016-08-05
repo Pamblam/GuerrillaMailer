@@ -41,11 +41,20 @@ var GuerrillaMailer = (function($){
 		emails: []
 	};
 	
-	function email(data){
-		self = this;
-		self.from = null;
-		self.subject = null;
-		self.snippet = null;
+	var mailIds = [];
+	function makeEmail(data){
+		for(var i=0; i<mailIds.length; i++)
+			if(mailIds[i]==data.mail_id) return false;
+		mailIds.push(data.mail_id);
+		var mailId = data.mail_id;
+		return {
+			getFrom: function(){ return data.mail_from; },
+			getSubject: function(){ return data.mail_subject; },
+			getExcerpt: function(){ return data.mail_excerpt; },
+			getTimestamp: function(){ return data.mail_timestamp; },
+			isRead: function(){ return data.mail_read==1; },
+			getSize: function(){ return data.mail_size; }
+		};
 	}
 	
 	function ts(){
@@ -85,7 +94,8 @@ var GuerrillaMailer = (function($){
 		data.scrambledEmailUser = resp.alias;
 		if(lastEmail!==data.emailUser){
 			data.emails = [];
-			lastEmail = data.emailUserl;
+			mailIds = [];
+			lastEmail = data.emailUser;
 		}
 	}
 	
@@ -109,11 +119,13 @@ var GuerrillaMailer = (function($){
 		if(false===data.emailUser) return getEmail(function(email){
 			getEmails(cb);
 		});
-		// TODO.. grab emails
-		// TODO.. create array of email objects
-		// email constructor has been started above
-		// add array of emails to data.emails
-		// callback with emails...
+		makeAPICall("check_email", {seq: 1}, function(resp){
+			for(var i=0; i<resp.list.count; i++){
+				var em = makeEmail(resp.list[i]);
+				if(em !== false) data.emails.push(em);
+			}
+			cb(data.emails);
+		});
 	}
 	
 	function getExpiration(cb){
@@ -158,7 +170,8 @@ var GuerrillaMailer = (function($){
 		getExpiration: getExpiration,
 		getEmail: getEmail,
 		getNewEmail: getNewEmail,
-		setEmailUser: setEmailUser
+		setEmailUser: setEmailUser,
+		getEmails: getEmails
 	};
 	
 })(jQuery);
