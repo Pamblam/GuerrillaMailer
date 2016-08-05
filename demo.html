@@ -70,6 +70,7 @@
 			<button id="scrambledem">Get Scrambled Email</button>
 			<button id="setdomain">Set Email Domain</button>
 			<button id="checkinbox">Check Inbox</button>
+			<button id="forget">Forget Email</button>
 		</div>
 		<div class="output">
 			<h2>Output</h2>
@@ -126,6 +127,15 @@
 					// Get expiration timestamp
 					GuerrillaMailer.getExpiration(function(timestamp){
 						console.log("Email expires at: "+timestamp);
+					});
+				});
+				
+				$("#forget").click(function(){
+					console.log(">");
+					console.log("Forgetting email...");
+					// Forget email
+					GuerrillaMailer.forgetEmail(function(){
+						console.log("Email forgotten");
 					});
 				});
 				

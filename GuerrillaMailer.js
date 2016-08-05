@@ -163,6 +163,20 @@ var GuerrillaMailer = (function($){
 		data.emailDomain = D[domain];
 	}
 	
+	function forgetEmail(cb){
+		makeAPICall("forget_me", {email_addr: data.emailUser+"@guerrillamailblock.com"}, function(resp){
+			data = {
+				emailUser: false,
+				emailDomain: D[Domains.GUERRILLAMAILBLOCK.COM],
+				scrambledEmailUser: false,
+				expires: false,
+				token: false,
+				emails: []
+			};
+			cb();
+		});
+	}
+	
 	return {
 		Domains: Domains,
 		setEmailDomain: setEmailDomain,
@@ -171,7 +185,8 @@ var GuerrillaMailer = (function($){
 		getEmail: getEmail,
 		getNewEmail: getNewEmail,
 		setEmailUser: setEmailUser,
-		getEmails: getEmails
+		getEmails: getEmails,
+		forgetEmail: forgetEmail
 	};
 	
 })(jQuery);
