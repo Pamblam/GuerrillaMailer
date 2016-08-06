@@ -30,17 +30,17 @@ GuerrillaMailer.setEmailUser(emailUser, function(newEmail){
 
 #### setEmailDomain(newDomain)
 Set the domain part of the email address. It takes one parameter, an int that represents one of the 11 available domains. There are a set of constants to represent each possible paramter for this function. This function doesn't return anything.
- 0) GuerrillaMailer.Domains.SHARKLASERS.COM
- 1) GuerrillaMailer.Domains.GUERRILLAMAIL.INFO
- 2) GuerrillaMailer.Domains.GRR.LA
- 3) GuerrillaMailer.Domains.GUERRILLAMAIL.BIZ
- 4) GuerrillaMailer.Domains.GUERRILLAMAIL.COM
- 5) GuerrillaMailer.Domains.GUERRILLAMAIL.DE
- 6) GuerrillaMailer.Domains.GUERRILLAMAIL.NET
- 7) GuerrillaMailer.Domains.GUERRILLAMAIL.ORG
- 8) GuerrillaMailer.Domains.GUERRILLAMAILBLOCK.BIZ
- 9) GuerrillaMailer.Domains.POKEMAIL.NET
- 10) GuerrillaMailer.Domains.SPAM4.ME
+ 0. GuerrillaMailer.Domains.SHARKLASERS.COM
+ 1. GuerrillaMailer.Domains.GUERRILLAMAIL.INFO
+ 2. GuerrillaMailer.Domains.GRR.LA
+ 3. GuerrillaMailer.Domains.GUERRILLAMAIL.BIZ
+ 4. GuerrillaMailer.Domains.GUERRILLAMAIL.COM
+ 5. GuerrillaMailer.Domains.GUERRILLAMAIL.DE
+ 6. GuerrillaMailer.Domains.GUERRILLAMAIL.NET
+ 7. GuerrillaMailer.Domains.GUERRILLAMAIL.ORG
+ 8. GuerrillaMailer.Domains.GUERRILLAMAILBLOCK.BIZ
+ 9. GuerrillaMailer.Domains.POKEMAIL.NET
+ 10. GuerrillaMailer.Domains.SPAM4.ME
 ```sh
 var domain = GuerrillaMailer.Domains.SHARKLASERS.COM;
 GuerrillaMailer.setEmailDomain(domain);
